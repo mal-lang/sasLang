@@ -17,7 +17,7 @@
 include "org.mal-lang.icsLang/icsLang.mal"
 
 category sclHierarchy {
-	asset Bay 
+	asset Bay extends PhysicalZone 
 	user info: "Asset taken from SCL. Assets of substations are often segmented into bays."
 	{
 	}
@@ -25,7 +25,7 @@ category sclHierarchy {
 	user info: "Asset taken from SCL-Lang. An entire substation."
 	{
 	}
-    	asset VoltageLevel
+    	asset VoltageLevel extends PhysicalZone 
 	user info: "Asset taken from SCL-Lang. A substations equipment are often divided into several voltage levels."
 	{	
 	}
@@ -225,4 +225,3 @@ associations {
 	VoltageLevel [voltageLevel] 1 <-- Includes --> 1..* [bay] Bay	
 	SIS [sis] * <-- Protects --> * [equipment] Equipment
 }
-
