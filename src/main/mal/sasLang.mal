@@ -53,6 +53,8 @@ category physical {
 	asset Clock extends IcsApplication 
 	user info: "Taken from SCL-Lang."
 	{
+		| communicate 
+			-> accessPoint.communicate
 	}
 	asset Equipment extends PhysicalObject
 	user info: "Asset taken from SCL-Lang. Components that conduct electricity, circuit breaker etc."
@@ -133,6 +135,8 @@ category physical {
 	asset Function 
 	user info: "Asset taken from SCL-Lang. Any additional functions of the substation. Can be unrelated to energy."
 	{
+		| execution
+			-> logicalNode.manipulationOfControl
 		
 	}
 	asset Gateway extends IcsApplication 
@@ -205,23 +209,9 @@ category physical {
 }
 associations {
 	ActuatorCB [actuatorCB] * <-- CloseOrTrip --> * [circuitBreaker] CircuitBreaker
-	CircuitBreaker [circuitBreaker] * <-- Communicate --> * [mu] MU
 	Clock [clock] 0..1 <-- Communication --> 1 [accessPoint] AccessPoint
-	Clock [clock] * <-- EnableSyncData--> * [mu] MU
-	Equipment [equipment] * <-- Communication --> * [signal] Signal
-	Equipment [equipment] * <-- BelongsTo --> 1 [bay] Bay
-	Equipment [equipment] * <-- PartOf --> * [sensor] Sensor
 	Function [function] * <-- Communication --> * [logicalNode] LogicalNode
-	IEDSystem [iedSystem] 1 <-- Communication --> 1..* [accessPoint] AccessPoint
 	IEDRouter [iedRouter] * <-- SubnetConnection --> 1..* [accessPoint] AccessPoint
-	IEDSystem [iedSystem] * <-- Authorizedwith --> * [credentials] Credentials
-	IEDSystem [iedSystem] * <-- Commmunicate --> * [circuitBreaker] CircuitBreaker
-	LogicalNode [logicalNode] * <-- ExistsIn --> 1 [bay] Bay
 	LogicalNode [logicalNode] * <-- Represents --> * [equipment] Equipment
-	LogicalNode [logicalNode] * <-- Represents --> * [sensor] Sensor
 	LogicalNode [logicalNode] * <-- Represents --> * [actuator] Actuator 
-	Substation [substation] 1 <-- Includes --> 1..* [voltageLevel] VoltageLevel
-	Substation [substation] * <-- Includes --> * [substationServer] SubstationServer
-	VoltageLevel [voltageLevel] 1 <-- Includes --> 1..* [bay] Bay	
-	SIS [sis] * <-- Protects --> * [equipment] Equipment
 }
