@@ -54,7 +54,7 @@ category physical {
 	user info: "Taken from SCL-Lang."
 	{
 	}
-	asset Equipment 
+	asset Equipment extends PhysicalObject
 	user info: "Asset taken from SCL-Lang. Components that conduct electricity, circuit breaker etc."
 	{
 	// Start of IcsLangs Impact Attack steps
@@ -106,7 +106,7 @@ category physical {
         ->  attemptPreemptiveShutdown
 
       | lossOfView {A}
-        user info: "Taken from icsLang. Adversaries may cause a sustained or permanent loss of view where the ICS equipment will require local, hands-on operator intervention."
+        user info: "Taken from icsLang. Adversaries may cause a sustained or permanent loss of view where the ICS will require local, hands-on operator intervention."
         developer info: "MITRE ATT&CK ICS T829."
         ->  attemptPreemptiveShutdown
 
@@ -169,7 +169,7 @@ category physical {
 	user info: "A Merging Unit (MU) merge the analog signals and translate these to electronic signals. Asset taken from the review of industry SAS designs."
 	{
 	}
-	asset Equipment extends PhysicalObject 
+	asset PhysicalObject  
 	{
 	}
 	asset RTU extends IcsSystem	
