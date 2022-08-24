@@ -53,8 +53,8 @@ category physical {
 	asset Clock extends IcsApplication 
 	user info: "Taken from SCL-Lang."
 	{
-		| communicate 
-			-> accessPoint.communicate
+		| logicalConnection 
+			-> accessPoint.attemptConnectToApplications
 	}
 	asset Equipment extends PhysicalObject
 	user info: "Asset taken from SCL-Lang. Components that conduct electricity, circuit breaker etc."
