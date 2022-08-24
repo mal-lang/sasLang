@@ -169,7 +169,7 @@ category physical {
 	user info: "A Merging Unit (MU) merge the analog signals and translate these to electronic signals. Asset taken from the review of industry SAS designs."
 	{
 	}
-	asset PhysicalObject extends Equipment
+	asset Equipment extends PhysicalObject 
 	{
 	}
 	asset RTU extends IcsSystem	
