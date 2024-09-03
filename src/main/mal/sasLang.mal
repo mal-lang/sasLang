@@ -16,18 +16,27 @@
 
 include "org.mal-lang.icsLang/icsLang.mal"
 
+
 category sclHierarchy {
 	asset Bay extends PhysicalZone 
 	user info: "Asset taken from SCL. Assets of substations are often segmented into bays."
 	{
+		| hierarchy
+			-> voltageLevel.hierarchy,
+				equipment.hierarchy
 	}
 	asset Substation extends PhysicalZone 
 	user info: "Asset taken from SCL-Lang. An entire substation."
 	{
+		| hierarchy
+			-> voltageLevel.hierarchy
 	}
     	asset VoltageLevel extends PhysicalZone 
 	user info: "Asset taken from SCL-Lang. A substations equipment are often divided into several voltage levels."
 	{	
+		| hierarchy
+			-> bay.hierarchy,
+				substation.hierarchy
 	}
 }
 category physical {
@@ -54,11 +63,13 @@ category physical {
 	user info: "Taken from SCL-Lang."
 	{
 		| logicalConnection 
-			-> accessPoint.attemptConnectToApplications
+			-> accessPoint.attemptConnectToApplicationsUninspected
 	}
 	asset Equipment extends PhysicalObject
 	user info: "Asset taken from SCL-Lang. Components that conduct electricity, circuit breaker etc."
 	{
+		| hierarchy
+			-> bay.hierarchy
 	// Start of IcsLangs Impact Attack steps
 		| attemptPreemptiveShutdown @hidden
         user info: "Taken from icsLang. Intermediate attack step for modelling the possibility of detecting a disruption(loss of Control/View) and preemptively shutting down the system in order to prevent damage."
@@ -143,15 +154,15 @@ category physical {
 	user info: "Asset taken from the review of industry SAS designs. Communicates externally and has the function to translate protocols."	
 	{
 	}
-	asset IEDSystem extends IcsSystem 
+	asset IEDHardware extends IcsHardware 
 	user info: "Taken from SCL-Lang."
 	{	
 	}	
-	asset IEDRouter extends IcsSystem 
+	asset IEDRouter extends IcsHardware 
 	user info: "According to SCL, an IED with routing capabilities that can connect different subnetworks with accesspoints. "
 	{	
 		| logicalConnection
-			-> accessPoint.attemptConnectToApplications
+			-> accessPoint.attemptConnectToApplicationsUninspected
 	}	
 	asset LogicalDevice extends IcsApplication 
 	user info: "Asset taken from SCL-Lang. Resides in a Server and contains LogicalNodes."
@@ -169,14 +180,14 @@ category physical {
 				actuator.block
 	}
 
-	asset MU extends IcsSystem 
+	asset MU extends IcsHardware 
 	user info: "A Merging Unit (MU) merge the analog signals and translate these to electronic signals. Asset taken from the review of industry SAS designs."
 	{
 	}
 	asset PhysicalObject  
 	{
 	}
-	asset RTU extends IcsSystem	
+	asset RTU extends IcsHardware	
 	user info: "A Remote Terminal Unit can be used for communication externally. Asset taken from the review of industry SAS designs."
 	{
 	}
@@ -209,9 +220,19 @@ category physical {
 }
 associations {
 	ActuatorCB [actuatorCB] * <-- CloseOrTrip --> * [circuitBreaker] CircuitBreaker
-	Clock [clock] 0..1 <-- Communication --> 1 [accessPoint] AccessPoint
-	Function [function] * <-- Communication --> * [logicalNode] LogicalNode
+	Clock [clock] 0..1 <-- ClockCommun --> 1 [accessPoint] AccessPoint
+	Function [function] * <-- FuncCommun --> * [logicalNode] LogicalNode
 	IEDRouter [iedRouter] * <-- SubnetConnection --> 1..* [accessPoint] AccessPoint
-	LogicalNode [logicalNode] * <-- Represents --> * [equipment] Equipment
-	LogicalNode [logicalNode] * <-- Represents --> * [actuator] Actuator 
+	LogicalNode [logicalNode] * <-- EqRepresent --> * [equipment] Equipment
+	LogicalNode [logicalNode] * <-- ActRepresent --> * [actuator] Actuator 
+	
+	Substation [substation] 1 <-- SubstatIncludesVL --> * [voltageLevel] VoltageLevel
+	VoltageLevel [voltageLevel] 1 <-- VLIncludesBay --> * [bay] Bay
+	Bay [bay] 1 <-- BayIncludesEq --> * [equipment] Equipment
+	
+	LogicalNode [logicalNode] * <-- BayLevelLN --> * [bay] Bay
+	LogicalNode [logicalNode] * <-- VoltageLevelLN --> * [voltageLevel] VoltageLevel
+	LogicalNode [logicalNode] * <-- SubstatLevelLN --> * [substation] Substation
+	Substation [substation] * <-- SubstatIncludesEq --> * [equipment] Equipment
+	VoltageLevel [voltageLevel] * <-- VoltageLevelIncludesEq --> * [equipment] Equipment
 }
