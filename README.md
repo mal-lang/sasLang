@@ -2,9 +2,15 @@
 
 sasLang is a Meta Attack Language (MAL) for Substation Automation Systems (SAS). The language is an extension of coreLang and icsLang found at https://github.com/mal-lang. 
 
+# Current compiler
+The language can be compiled with the malc compiler for MAL-based languages: [https://github.com/mal-lang/malc](https://github.com/mal-lang/malc). 
+The MAL toolbox can be used for creating MAL models and attack graphs: [https://github.com/mal-lang/malc.](https://github.com/mal-lang/mal-toolbox) Please see the mal-toolbox tutorial for more information: [https://github.com/mal-lang/mal-toolbox-tutorial](https://github.com/mal-lang/mal-toolbox-tutorial).
+
+# Previous compiler
+The following are the instructions of how to compile sasLang with a previous compiler.
 This project has the following structure:
 
-* The file `pom.xml` is the Maven configuration file of the project.
+* The file `pom.xml` is a Maven configuration file of the project.
 * The directory `src/main/mal` contains the MAL specification
   `sasLang.mal`, which is the MAL specification of sasLang.
 * The directory `src/main/resources/icons` contains SVG icons for the
@@ -28,11 +34,6 @@ The
 compiles MAL specifications (`.mal` files) into different formats,
 using different backends. The reference backend generates Java code
 that is suitable for testing purposes and evaluating your language.
-The securiCAD backend generates a `.jar` file that can be used with
-[foreseeti](https://www.foreseeti.com/)'s products, including
-[securiCAD](https://www.foreseeti.com/securicad/), which is a tool
-that can be used to graphically create models using your language and
-to simulate attacks on those models.
 
 ### Building with the reference backend and running the unit tests
 
@@ -82,37 +83,6 @@ mvn test -Dtest=TestsasLang#TEST
 
 Where `TestsasLang` is the test class and `TEST` is the
 test method.
-
-### Building a securiCAD compatible .jar file
-
-To build a securiCAD compatible `.jar` file, you need access to
-foreseeti's maven repository. To request access, please contact
-<support@foreseeti.com>. When you have received your credentials, you
-can store them in a file `~/.aws/credentials`
-(`%UserProfile%\.aws\credentials` on windows). For example:
-
-```
-[default]
-aws_access_key_id=AKIAIOSFODNN7EXAMPLE
-aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-```
-
-To compile sasLang with the securiCAD backend of the MAL
-compiler, execute the following command:
-
-```
-mvn package -PsecuriCAD
-```
-
-The resulting `.jar` file will be located in
-`target/sasLang-1.0.0.jar`.
-
-If you don't want to run the unit tests when building a securiCAD
-compatible `.jar` file, execute the following command:
-
-```
-mvn clean package -PsecuriCAD -Dmaven.test.skip=true
-```
 
 ## License
 
